@@ -13,6 +13,11 @@ module WechatPayHelper # :nodoc:
     end
 
     def make_request(method:, path:, for_sign: '', payload: {}, extra_headers: {})
+      gateway_url = if path.include?('/v3/global/transactions')
+                      'https://apihk.mch.weixin.qq.com'
+                    else
+                      GATEWAY_URL
+                    end
       authorization = WechatPay::Sign.build_authorization_header(method, path, for_sign)
       headers = {
         'Authorization' => authorization,
@@ -21,10 +26,12 @@ module WechatPayHelper # :nodoc:
         'Accept-Encoding' => '*'
       }.merge(extra_headers)
 
+      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}"
       rs = RestClient::Request.execute(
-        url: "#{GATEWAY_URL}#{path}",
+        url: "#{gateway_url}#{path}",
         method: method.downcase,
         payload: payload,
+        log: Logger.new(STDERR),
         headers: headers.compact # Remove empty items
       )
       Rails.logger.info "res: #{rs.inspect}"

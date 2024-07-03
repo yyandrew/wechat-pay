@@ -349,7 +349,7 @@ module WechatPay
       private
 
       def direct_transactions_method_by_suffix(suffix, params)
-        url = "/v3/pay/transactions/#{suffix}"
+        url = "/v3/global/transactions/#{suffix}"
         method = 'POST'
 
         params = {
