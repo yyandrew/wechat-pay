@@ -17,15 +17,17 @@ module WechatPayHelper # :nodoc:
       headers = {
         'Authorization' => authorization,
         'Content-Type' => 'application/json',
-        'Accept-Encoding' => '*'
+        'Accept-Encoding' => 'application/json'
       }.merge(extra_headers)
 
-      RestClient::Request.execute(
+      rs = RestClient::Request.execute(
         url: "#{GATEWAY_URL}#{path}",
         method: method.downcase,
         payload: payload,
         headers: headers.compact # Remove empty items
       )
+      Rails.logger.info "res: #{rs.inspect}"
+      rs
     rescue ::RestClient::ExceptionWithResponse => e
       e.response
     end

@@ -11,6 +11,7 @@ rescue LoadError
 end
 
 require 'rdoc/task'
+require "bundler/gem_tasks"
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "wechat-pay #{WechatPay::VERSION}"
