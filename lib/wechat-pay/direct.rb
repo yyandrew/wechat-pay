@@ -235,16 +235,16 @@ module WechatPay
     # Example:
     #
     # ``` ruby
-    # WechatPay::Direct.invoke_refund(transaction_id: '4323400972202104305131070170', total: 1, refund: 1, out_refund_no: 'R10000')
-    # WechatPay::Direct.invoke_refund(out_trade_no: 'N2021', total: 1, refund: 1, out_refund_no: 'R10000').body
+    # WechatPay::Direct.invoke_refund(transaction_id: '4323400972202104305131070170', total: 1, refund: 1, out_refund_no: 'R10000', out_refund_no: 'out_refund_no', currency: 'HKD', mchid: 'mchid', appid: 'appid').body
+    # WechatPay::Direct.invoke_refund(out_trade_no: 'N2021', total: 1, refund: 1, out_refund_no: 'R10000', currency: 'HKD', mchid: "mchid", appid: 'appid').body
     # ```
     def self.invoke_refund(params)
-      url = '/v3/refund/domestic/refunds'
+      url = '/v3/global/refunds'
       method = 'POST'
       amount = {
         refund: params.delete(:refund),
         total: params.delete(:total),
-        currency: 'CNY'
+        currency: params.delete(:currency)
       }
 
       params = params.merge({
