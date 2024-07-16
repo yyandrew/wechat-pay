@@ -230,7 +230,7 @@ module WechatPay
     #
     # 退款申请
     #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_9.shtml
+    # Document: https://pay.weixin.qq.com/wiki/doc/api_external/ch/apis/chapter3_4_3.shtml
     #
     # Example:
     #
