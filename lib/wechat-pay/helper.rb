@@ -34,7 +34,7 @@ module WechatPayHelper # :nodoc:
         raw_response: true,
         headers: headers.compact # Remove empty items
       )
-      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}, log_response: #{rs.log_response}"
+      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}, duration: #{sprintf('%.2f', duration)}s
       rs
     rescue ::RestClient::ExceptionWithResponse => e
       e.response
