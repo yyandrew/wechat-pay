@@ -26,14 +26,16 @@ module WechatPayHelper # :nodoc:
         'Accept-Encoding' => '*'
       }.merge(extra_headers)
 
-      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}"
+      now = Time.now
       rs = RestClient::Request.execute(
         url: "#{gateway_url}#{path}",
         method: method.downcase,
         payload: payload,
         log: Logger.new(STDERR),
+        raw_response: true,
         headers: headers.compact # Remove empty items
       )
+      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}, spend time: #{(Time.now - now).to_f.round(5)}"
       Rails.logger.info "res: #{rs.inspect}"
       rs
     rescue ::RestClient::ExceptionWithResponse => e
