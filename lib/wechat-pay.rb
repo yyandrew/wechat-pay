@@ -5,7 +5,6 @@
 require 'restclient'
 require 'wechat-pay/sign'
 require 'wechat-pay/direct' # 直连模式
-require 'wechat-pay/ecommerce' # 电商平台
 
 # # 微信支付
 #
