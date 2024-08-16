@@ -124,43 +124,11 @@ module WechatPay
       )
     end
 
-    CLOSE_COMBINE_ORDER_FIELDS = %i[combine_out_trade_no sub_orders].freeze # :nodoc:
-    #
-    # 关闭合单
-    #
-    # TODO: 与电商平台相同，稍后重构
-    #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter7_3_11.shtml
-    #
-    # ``` ruby
-    # WechatPay::Direct.close_combine_order(combine_out_trade_no: 'C202104302474')
-    # ```
-    def self.close_combine_order(params)
-      combine_out_trade_no = params.delete(:combine_out_trade_no)
-
-      url = "/v3/combine-transactions/out-trade-no/#{combine_out_trade_no}/close"
-
-      payload = {
-        combine_appid: WechatPay.app_id
-      }.merge(params)
-
-      payload_json = payload.to_json
-
-      method = 'POST'
-
-      make_request(
-        method: method,
-        for_sign: payload_json,
-        payload: payload_json,
-        path: url
-      )
-    end
-
     QUERY_ORDER_FIELDS = %i[out_trade_no transaction_id].freeze # :nodoc:
     #
     # 直连订单查询
     #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_2.shtml
+    # Document: https://pay.weixin.qq.com/wiki/doc/api_external/ch/apis/chapter3_4_2.shtml
     #
     # Example:
     #
@@ -173,11 +141,11 @@ module WechatPay
       if params[:transaction_id]
         params.delete(:out_trade_no)
         transaction_id = params.delete(:transaction_id)
-        path = "/v3/pay/transactions/id/#{transaction_id}"
+        path = "/v3/global/transactions/id/#{transaction_id}"
       else
         params.delete(:transaction_id)
         out_trade_no = params.delete(:out_trade_no)
-        path = "/v3/pay/transactions/out-trade-no/#{out_trade_no}"
+        path = "/v3/global/transactions/out-trade-no/#{out_trade_no}"
       end
 
       params = params.merge({
@@ -201,7 +169,7 @@ module WechatPay
     #
     # 关闭订单
     #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_3.shtml
+    # Document: https://pay.weixin.qq.com/wiki/doc/api_external/ch/apis/chapter3_4_7.shtml
     #
     # Example:
     #
@@ -211,7 +179,7 @@ module WechatPay
     #
     def self.close_order(params)
       out_trade_no = params.delete(:out_trade_no)
-      url = "/v3/pay/transactions/out-trade-no/#{out_trade_no}/close"
+      url = "/v3/global/transactions/out-trade-no/#{out_trade_no}/close"
       params = params.merge({
                               mchid: WechatPay.mch_id
                             })
@@ -280,65 +248,6 @@ module WechatPay
       make_request(
         method: method,
         path: url,
-        extra_headers: {
-          'Content-Type' => 'application/x-www-form-urlencoded'
-        }
-      )
-    end
-
-    TRADEBILL_FIELDS = [:bill_date].freeze # :nodoc:
-    #
-    # 直连申请交易账单
-    #
-    # Todo: 跟商户平台接口相同
-    #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_6.shtml
-    #
-    # Example:
-    #
-    # ``` ruby
-    # WechatPay::direct.tradebill(bill_date: '2021-04-30')
-    # ```
-    def self.tradebill(params)
-      path = '/v3/bill/tradebill'
-      method = 'GET'
-
-      query = build_query(params)
-      url = "#{path}?#{query}"
-
-      make_request(
-        path: url,
-        method: method,
-        extra_headers: {
-          'Content-Type' => 'application/x-www-form-urlencoded'
-        }
-      )
-    end
-
-    FUNDFLOWBILL_FIELDS = [:bill_date].freeze # :nodoc:
-    #
-    # 申请资金账单
-    #
-    # Todo: 跟商户平台接口相同
-    #
-    # Document: https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_7.shtml
-    #
-    # Example:
-    #
-    # ``` ruby
-    # WechatPay::Direct.fundflowbill(bill_date: '2021-04-30')
-    # ```
-    #
-    def self.fundflowbill(params)
-      path = '/v3/bill/fundflowbill'
-      method = 'GET'
-
-      query = build_query(params)
-      url = "#{path}?#{query}"
-
-      make_request(
-        path: url,
-        method: method,
         extra_headers: {
           'Content-Type' => 'application/x-www-form-urlencoded'
         }
