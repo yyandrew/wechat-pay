@@ -4,7 +4,6 @@ require 'active_support/concern'
 
 module WechatPayHelper # :nodoc:
   GATEWAY_URL = 'https://api.mch.weixin.qq.com'
-  HK_GATEWAY_URL = 'https://apihk.mch.weixin.qq.com'
 
   extend ActiveSupport::Concern
 
@@ -14,7 +13,7 @@ module WechatPayHelper # :nodoc:
     end
 
     def make_request(method:, path:, for_sign: '', payload: {}, extra_headers: {})
-      gateway_url = HK_GATEWAY_URL
+      gateway_url = GATEWAY_URL
       authorization = WechatPay::Sign.build_authorization_header(method, path, for_sign)
       headers = {
         'Authorization' => authorization,
@@ -30,7 +29,7 @@ module WechatPayHelper # :nodoc:
         raw_response: true,
         headers: headers.compact # Remove empty items
       )
-      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}, duration: #{format('%.2f', rs.duration)}s, resp: #{rs.inspect}"
+      Rails.logger.info "[WechatPayHelper#make_request] url: #{gateway_url}#{path}, duration: #{format('%.2f', rs.duration)}s"
       rs
     rescue ::RestClient::ExceptionWithResponse => e
       e.response
