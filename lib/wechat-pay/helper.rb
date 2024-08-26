@@ -4,6 +4,7 @@ require 'active_support/concern'
 
 module WechatPayHelper # :nodoc:
   GATEWAY_URL = 'https://api.mch.weixin.qq.com'
+  HK_GATEWAY_URL = 'https://apihk.mch.weixin.qq.com'
 
   extend ActiveSupport::Concern
 
@@ -13,7 +14,7 @@ module WechatPayHelper # :nodoc:
     end
 
     def make_request(method:, path:, for_sign: '', payload: {}, extra_headers: {})
-      gateway_url = GATEWAY_URL
+      gateway_url = HK_GATEWAY_URL
       authorization = WechatPay::Sign.build_authorization_header(method, path, for_sign)
       headers = {
         'Authorization' => authorization,
